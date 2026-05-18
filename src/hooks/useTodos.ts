@@ -1,14 +1,8 @@
 import { useState, useEffect } from 'react';
+import { Todo, Priority } from '@/types';
 
-export type Priority = 'low' | 'medium' | 'high';
-
-export interface Todo {
-  id: string;
-  text: string;
-  completed: boolean;
-  priority: Priority;
-  createdAt: number;
-}
+export type { Priority };
+export type { Todo };
 
 const STORAGE_KEY = 'todos-app-data';
 
@@ -53,9 +47,15 @@ export function useTodos() {
     setTodos(prev => prev.filter(t => t.id !== id));
   }
 
+  function editTodo(id: string, text: string) {
+    setTodos(prev =>
+      prev.map(t => (t.id === id ? { ...t, text } : t))
+    );
+  }
+
   function clearCompleted() {
     setTodos(prev => prev.filter(t => !t.completed));
   }
 
-  return { todos, addTodo, toggleTodo, deleteTodo, clearCompleted };
+  return { todos, addTodo, toggleTodo, deleteTodo, editTodo, clearCompleted };
 }
